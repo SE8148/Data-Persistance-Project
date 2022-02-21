@@ -16,6 +16,8 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
+    public int bestScore;
+    public string bestPlayerName;
     
     private bool m_GameOver = false;
 
@@ -38,7 +40,8 @@ public class MainManager : MonoBehaviour
             }
         }
 
-        PlayerName.text = MainDataManager.instance.playerName;
+        bestScore = MainDataManager.instance.bestScore;
+        PlayerName.text = $"Best Score: {MainDataManager.instance.bestPlayer}: {MainDataManager.instance.bestScore}";
     }
 
     private void Update()
@@ -60,6 +63,7 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                MainDataManager.instance.SaveScore();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
@@ -69,6 +73,11 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        if(m_Points > bestScore)
+        {
+            MainDataManager.instance.bestScore = m_Points;
+            MainDataManager.instance.bestPlayer = MainDataManager.instance.playerName;
+        }
     }
 
     public void GameOver()
